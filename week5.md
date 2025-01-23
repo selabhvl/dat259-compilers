@@ -112,10 +112,11 @@ Test input:
 3. Define the following shell-aliases (Windows users have to find out how to do the following bash commands in [Powershell](https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/using-aliases?view=powershell-7.4)):
 ```bash
 alias antlr4='java -jar /path/where/you/downloaded/antlr-4.13.2-complete.jar'
-alias grun='java -cp /path/where/you/downloaded/antlr-4.13.2-complete.jar org.antlr.v4.runtime.misc.TestRig'
+alias grun='CLASSPATH=".:/path/where/you/downloaded/antlr-4.13.2-complete.jar:$CLASSPATH" java org.antlr.v4.gui.TestRig'
 ```
+**NOTE** It is super importatnt to keep the little `.:` at the front of the `CLASSPATH` variable definition!
 4. Create a `<YourLanguageName>.g4` file and then write your lexer rules in it (UPPERCASE names!)
-5. Make sure to add a "catch-all" grammar rule on the top:
+5. Add a simple "catch-all" grammar rule on the top at the end (also make sure that you handle whitespace):
 ```
 file : (
     TOKEN1 |
@@ -123,7 +124,11 @@ file : (
     ...
     TOKENN ) *;
 ```
-6. Check whether all tokens are recognized in some example file:
+6. Compile the generated java code in the current directory with 
+```bash
+javac *.java
+```
+7. Check whether all tokens are recognized in your example file:
 ```bash
 grun <YourLanguageName> file -tokens <example-file>
 ```
