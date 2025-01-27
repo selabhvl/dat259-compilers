@@ -33,6 +33,17 @@ By adding the keyword `fragment` in front of a rule definition, the respective r
 Fragment rules do not create tokens put are meant solely to be used as parts of other lexer rules, i.e.
 for better modularization.
 
+#### Conflicting Rule 
+
+If you have overlapping rules like e.g.:
+```
+INT: '-'? [1-9][0-9]*;
+FLOAT: '-'? [1-9][0-9]*('.'[0-9]+)?;
+```
+then conflicts are resolved by favorising the rule that is defined first.
+If you would swap the order of the two rules above, every number would be matched as a `FLOAT` even when they
+do not have a fractional part.
+
 #### Non-greedy sub-rules 
 
 Per default the `r*` operator tries to match the pattern `r` _greedy_ (i.e. as far as possible). 

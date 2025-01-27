@@ -107,30 +107,15 @@ Test input:
 
 ## Assignment: Develop a Lexer for your language 
 
-1. Make sure you have JAVA (>= 11) installed (i.e. the JVM binary `java` is on your path)
-2. Download the [antlr-complete.jar](https://www.antlr.org/download/antlr-4.13.2-complete.jar) (current version when writing this on 2025-01-22: 4.13.2)
-3. Define the following shell-aliases (Windows users have to find out how to do the following bash commands in [Powershell](https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/using-aliases?view=powershell-7.4)):
-```bash
-alias antlr4='java -jar /path/where/you/downloaded/antlr-4.13.2-complete.jar'
-alias grun='CLASSPATH=".:/path/where/you/downloaded/antlr-4.13.2-complete.jar:$CLASSPATH" java org.antlr.v4.gui.TestRig'
-```
-**NOTE** It is super importatnt to keep the little `.:` at the front of the `CLASSPATH` variable definition!
-4. Create a `<YourLanguageName>.g4` file and then write your lexer rules in it (UPPERCASE names!)
-5. Add a simple "catch-all" grammar rule on the top at the end (also make sure that you handle whitespace):
-```
-file : (
-    TOKEN1 |
-    TOKEN2 |
-    ...
-    TOKENN ) *;
-```
-6. Compile the generated java code in the current directory with 
-```bash
-javac *.java
-```
-7. Check whether all tokens are recognized in your example file:
-```bash
-grun <YourLanguageName> file -tokens <example-file>
-```
+1. Install ANTLR, see [Instructions](../notes/antlr-00-setup-notes.md)
+2. Create a `<YourLanguageName>Tokens.g4` file and then write your `lexer grammar` rules in it (UPPERCASE names!), see [Notes](../notes/antlr-01-lexer-notes.md) for further references.
+3. For testing your lexer rules, you can use the `TestRig`, i.e.:
+    - after each iteration you compile the Lexer class `javac *.java` (make sure that the antlr jar is on your classpath),
+    - then run the `TestRig` in token mode:
+    ```bash
+    antdbg «YourLanguagName»Tokens tokens -tokens «your language file»
+    ```
+    the last parameter ("your language file") is optional. If it is not provided the TestRig reads from standard input, i.e.
+    you can write your tokens directly in there (terminated by `CTRL-Z` in POSIX and `CTRL-D` in Windows.)
 
 

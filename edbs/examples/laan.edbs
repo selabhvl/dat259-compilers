@@ -1,0 +1,17 @@
+LES beløp: «Tast inn lånebeløp».
+LES prosent: «Tast inn prosentsats».
+LES nedbetaling: «Tast inn månadleg innbetaling».
+LES år: «Tast inn tal år».
+REKN totalt-betalt: nedbetaling * 12 * år.
+GJENTAR
+	REKN årleg-nedbetaling: nedbetaling * 12,
+	REKN ny-beløp: beløp + (beløp * (prosent / 100)) – årleg-nedbetaling,
+	REKN avdrag: ny-beløp – beløp,
+	OPPDATER beløp: ny-beløp,
+	OPPDATER totalt-avdrag: totalt-avdrag’ + avdrag,
+	OPPDATER år: år’ – 1
+MEDAN år > 0.	
+SKRIV «Sum innbetalingar:» totalt-betalt.
+SKRIV «Sum avdrag:»  totalt-avdrag.
+FERDIG.
+

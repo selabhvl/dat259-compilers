@@ -1,0 +1,21 @@
+LES FIL innputt.
+OBS! streng støtter 'aritmetikk':
+OBS!   ++ er konkatenasjon
+OBS!   -- er substreng
+OBS!   // er 'split' (resultat er en liste)
+OBS!   ** er gjentakelse
+OBS! EBS støtter også spesialteikn:
+OBS!  <linjeskift> kan være '\r' eller '\r\n' avhengig av filens format
+OBS!  <tomrom> står for '<space>', 'tab', eller linjeskift 
+OBS!  <tom> er EDBS+ sitt 'null' :P
+REKN linje: innputt // <linjeskift>.
+REKN nåværende: NESTE AV linje.
+REKN teller: 0.
+GJENTAR
+    REKN ord: nåværende // <tomrom>,
+    OPPDATER teller: teller' + LENDGE AV ord,
+    OPPDATER nåværende: NESTE linje
+MEDAN IKKJE nåværende = <tom>.
+SKRIV «Antall ord i» innputt «er» teller. 
+FERDIG.
+
