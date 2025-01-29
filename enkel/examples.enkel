@@ -1,0 +1,24 @@
+definer tall fibonacci med, tall a , start
+ 
+    hvis, a <= 1, så
+        ny a.
+    slutt
+ 
+    resultat = gi, a-1, til fibonacci + 
+    gi, a-2, til fibonacci.
+slutt
+ 
+les fibonacci med, 12,
+ 
+ 
+definer heiPerson med, tekst a, start
+    skriv "hei" + a.
+slutt
+ 
+definer helloworld start
+    skriv "hello world".
+slutt
+ 
+gjør helloworld
+ 
+helloworld

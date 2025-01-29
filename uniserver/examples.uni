@@ -1,0 +1,20 @@
+🤗 foobar 👐🙏 👇
+  💼 👐🤗 "www.helloworld.no/"🙏 👇
+    { 👍, body } 👉 body
+    🦄 👉 😥
+ 
+💼 booleanExpr 👇
+  ✅ 👉 "true"
+  ❎ 👉 "false"
+ 
+🔒 fib 👐/?n: number🙏 👇
+  💼 n 👇
+    1 👉 1
+    2 👉 1
+    🦄 👉 👐fib n - 1🙏 + 👐fib n - 2🙏
+ 
+🔒 map 👐/?f: a 👉 b🙏 👇
+  🔒 foo 👐/?xs: 🫸a 🫷🙏 👇
+    💼 xs 👇
+      🫸🫷 👉 🫸🫷
+      👐y, ys🙏 👉 f y 🤝 map f ys
