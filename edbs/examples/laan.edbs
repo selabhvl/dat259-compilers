@@ -8,8 +8,8 @@ GJENTAR
 	REKN ny-beløp: beløp + (beløp * (prosent / 100)) – årleg-nedbetaling,
 	REKN avdrag: ny-beløp – beløp,
 	OPPDATER beløp: ny-beløp,
-	OPPDATER totalt-avdrag: totalt-avdrag’ + avdrag,
-	OPPDATER år: år’ – 1
+	OPPDATER totalt-avdrag: totalt-avdrag' + avdrag,
+	OPPDATER år: år' – 1
 MEDAN år > 0.	
 SKRIV «Sum innbetalingar:» totalt-betalt.
 SKRIV «Sum avdrag:»  totalt-avdrag.

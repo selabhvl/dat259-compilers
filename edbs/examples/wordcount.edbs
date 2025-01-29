@@ -4,7 +4,7 @@ OBS!   ++ er konkatenasjon
 OBS!   -- er substreng
 OBS!   // er 'split' (resultat er en liste)
 OBS!   ** er gjentakelse
-OBS! EBS støtter også spesialteikn:
+OBS! EDBS+ støtter også spesialteikn:
 OBS!  <linjeskift> kan være '\r' eller '\r\n' avhengig av filens format
 OBS!  <tomrom> står for '<space>', 'tab', eller linjeskift 
 OBS!  <tom> er EDBS+ sitt 'null' :P
