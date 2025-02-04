@@ -1,0 +1,8 @@
+LES STP: «Tast inn antall studiepoen».
+LES N: «Tast inn antall studentar».
+LES S:  «Tast inn antall studentassistentar».
+REKN F: 3.
+REKN R: 0,6 * (STP - 2) ^ (1 / 2)
+REKN resultat: 7,8 * STP * F + R * N / (1 + 0,15 * S) + 2 * 20 + 0,4 * N * 1,15.
+SKRIV «Du får» resultat «antall timar på arbeidsplanen din!».
+FERDIG.
