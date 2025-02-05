@@ -14,7 +14,7 @@ The general syntax is:
 ```
 
 The regular expressions follow the general syntax you learned in the lecture (with some convenience features like in UNIX regex).
-- Match a single character `c` with: `'c'` (you can use the all unicode characters; if you know the unicode-code point you can use `\uXXXX` where `XXXX` is unicode code point; the character `.` represents a _wildcard_ (any character), `\` works as an _escape_, i.e. to match a literal period, one needs to write `'\.'`)),
+- Match a single character `c` with: `'c'` (you can use the all unicode characters; if you know the unicode-code point you can use `\uXXXX` where `XXXX` is unicode code point; the character `.` represents a _wildcard_ (any character)),
 - Match a sequence of reg-exes _r1_, ... _rn_: `«r1» «r2» « ... » «r2»` (whitespaces are optional, and if your sub-regexes _r1_ to _rn_ are all single characters you can alternatively write `'hello'` instead of `'h' 'e' 'l' 'l' 'o'`).
 - Match a choice between regexes _r1_, ..., _rn_ with `«r1» | «r2» | « ... » | «r2»` (notice the vertical bars; also if all sub-regexes _r1_ to _rn_ are all single characters you can define a character set: `[abc]` is a shorthand for `'a' | 'b'| 'c'`).
 - Match an optional, arbitrary, or at-least-once occurence of a sub-regex _r_ via `?`, `*`, or `+`. Notice that you might have add parantheses `(` `)` where necessary.

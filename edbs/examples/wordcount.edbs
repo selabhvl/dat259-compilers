@@ -13,7 +13,7 @@ REKN nåværende: neste i linje.
 REKN teller: 0.
 GJENTAR
     REKN ord: nåværende // <tomrom>,
-    OPPDATER teller: teller' + LENDGE AV ord,
+    OPPDATER teller: teller' + 1,
     OPPDATER nåværende: neste i linje
 MEDAN IKKJE nåværende = <tom>.
 SKRIV «Antall ord i» innputt «er» teller. 
