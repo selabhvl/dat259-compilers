@@ -7,6 +7,7 @@ COLON : ':';
 COMMA : ',';
 PRIMED: '\'';
 WRITE_KEYWORD : 'SKRIV';
+READ_KEYWORD: 'LES';
 CALC_KEYWORD : 'REKN';
 REPEAT_KEYWORD :  'GJENTAR';
 CONDITION_KEYWORD : 'MEDAN';
@@ -36,6 +37,7 @@ OP_ADD : '+';
 OP_SUB: '-';
 OP_MUL: '*';
 OP_DIV : '/';
+OP_EXP : '^';
 
 SOP_CONCAT : '++';
 SOP_REPEAT : '**';
