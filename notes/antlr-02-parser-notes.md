@@ -11,7 +11,7 @@ The _new_ thing is that it is allowed to have rules that called themselved recur
 When it comes to antlr, not that much changes. The most fundamental:
 
 - You have to write `grammar X;` instead of `lexer grammar X;` in your language file `X.g4`
-- Rules must now start with a **lowercase** letter: `rule ::= ...`.
+- Rules must now start with a **lowercase** letter: `rule : ...`.
 
 The rest stays pretty much the same: You still define rules using sequence and choice (as well as `?`, `*`, and `+`)
 but rules may call themselves directly or indirectly.
@@ -36,7 +36,7 @@ that solves these problems _automagically_.
 You just need to know:
 
 - Antlr defines _precendence_ based on the order of sub-rules in the choice (`|`), i.e. the first alternative has highest precedence,
-- Antlr normally _associates_ from left to right, if your operator should associate the other way (e.g. "function composition" or "exponentiation") you must add `<assoc=right>` directly following the operator,
+- Antlr normally _associates_ from left to right, if your operator should associate the other way (e.g. "function composition" or "exponentiation") you must add `<assoc=right>` before the rule,
 - Antlr handles direct left-recursion out-of-the-box but it cannot deal with _indirect left-recursion_.
 
 ## Tool support 
