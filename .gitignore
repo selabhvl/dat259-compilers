@@ -171,3 +171,10 @@ cython_debug/
 .pypirc
 
 *.class
+edbs/edbs/EDBS.interp
+edbs/edbs/EDBS.tokens
+edbs/edbs/EDBSLexer.interp
+edbs/edbs/EDBSLexer.py
+edbs/edbs/EDBSLexer.tokens
+edbs/edbs/EDBSParser.py
+edbs/edbs/EDBSVisitor.py

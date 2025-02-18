@@ -4,6 +4,17 @@ from edbs.EDBSLexer import EDBSLexer
 from edbs.EDBSVisitor import EDBSVisitor
 
 
+class ExitCall(Exception):
+    pass
+
+class Module:
+
+    def __init__(self, formal_params, result, body):
+        self.formal_params = formal_params
+        self.result = result
+        self.body = body
+
+
 class SymbolTable:
 
     def __init__(self):
@@ -22,6 +33,35 @@ class SymbolTable:
         return name in self.storage
 
 
+class CollectActualParams(EDBSVisitor):
+
+    def __init__(self, symbol_table):
+        self.symbol_table = symbol_table
+        self.values = []
+
+    def visitActual_param_list(self, ctx:EDBSParser.Actual_param_listContext):
+        for p in ctx.getChildren():
+            self.visit(p)
+
+
+    def visitActual_param(self, ctx:EDBSParser.Actual_paramContext):
+        if ctx.IDENTIFIER() is not None:
+            self.values.append(self.symbol_table.get_var(str(ctx.IDENTIFIER())))
+        elif ctx.NUMBER():
+            self.values.append(float(str(ctx.NUMBER()).replace(".","").replace(",",".")))
+        else:
+            self.values.append(self.visit(ctx.str_literal()))
+
+    def visitStr_literal(self, ctx:EDBSParser.Str_literalContext):
+        if ctx.STRING() is not None:
+            return str(ctx.STRING())[1:-1]
+        elif ctx.NEWLINE_CHAR():
+            return '\n'
+        elif ctx.WHITESPACE_CHAR():
+            return ' '
+        elif ctx.NULL_CHAR():
+            return None
+
 
 class InterpreterVisitor(EDBSVisitor):
 
@@ -31,15 +71,27 @@ class InterpreterVisitor(EDBSVisitor):
 
     def visitModule_def(self, ctx:EDBSParser.Module_defContext):
         name = str(ctx.IDENTIFIER())
-        self.visit(ctx.input_params())
-        self.symbol_table.modules[name] = ctx.module_body()
+        params = self.visit(ctx.input_params())
+        result = self.visit(ctx.output_params())
+        ctx.output_params()
+        m = Module(params, result, ctx.module_body())
+        self.symbol_table.modules[name] = m
+
+    def visitOutput_params(self, ctx:EDBSParser.Output_paramsContext):
+        return str(ctx.IDENTIFIER())
 
     def visitInput_params(self, ctx:EDBSParser.Input_paramsContext):
-        self.visit(ctx.param_list())
+        return self.visit(ctx.param_list())
 
     def visitParam_list(self, ctx:EDBSParser.Param_listContext):
-        for c in ctx.children():
-            print(c)
+        idx = 0
+        current = ctx.IDENTIFIER(idx)
+        result = []
+        while current is not None:
+            result.append(str(current))
+            idx += 1
+            current = ctx.IDENTIFIER(idx)
+        return result
 
     def visitWrite_arg(self, ctx:EDBSParser.Write_argContext):
         if ctx.IDENTIFIER() is not None:
@@ -129,9 +181,16 @@ class InterpreterVisitor(EDBSVisitor):
 
     def visitCall(self, ctx:EDBSParser.CallContext):
         name = str(ctx.IDENTIFIER())
-        ctx.param_list()
-        exp = self.symbol_table.modules[name]
-        return None # TODO: parse
+        collect_actuals = CollectActualParams(self.symbol_table)
+        collect_actuals.visit(ctx.actual_param_list())
+        module = self.symbol_table.modules[name]
+        for p, v in zip(module.formal_params, collect_actuals.values):
+            self.symbol_table.add_var(p, v)
+        try:
+            self.visit(module.body)
+        except ExitCall:
+            pass # TODO: error handling
+        return self.symbol_table.get_var(module.result)
 
     # bool expressions
 
@@ -164,7 +223,7 @@ class InterpreterVisitor(EDBSVisitor):
 
 def main():
 
-    input_stream = FileStream("../examples/laan.edbs", encoding="utf-8")
+    input_stream = FileStream("../examples/modules.edbs", encoding="utf-8")
     lexer = EDBSLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = EDBSParser(token_stream)

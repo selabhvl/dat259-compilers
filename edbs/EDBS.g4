@@ -3,7 +3,7 @@ import EDBSTokens;
 
 program : module_def*  main_statement* FINISH_KEYWORD NEWLINE?;
 
-module_def : DEFINE_MOULE_KEYWORD IDENTIFIER MODULE_PARAM_KEYWORD NEWLINE? input_params NEWLINE? output_params NEWLINE? MODULE_BODY_KEYWORD COLON NEWLINE? module_body;
+module_def : DEFINE_MOULE_KEYWORD IDENTIFIER MODULE_PARAM_KEYWORD NEWLINE? input_params NEWLINE? output_params NEWLINE? MODULE_BODY_KEYWORD COLON NEWLINE? module_body EXIT_KEYWORD MODULE_KEYWORD PERIOD NEWLINE?;
 
 
 input_params : INPUT_PARAM_KEYWORD COLON param_list;
@@ -21,7 +21,7 @@ stmt : REPEAT_KEYWORD NEWLINE? stmt (COMMA NEWLINE? stmt)* NEWLINE? CONDITION_KE
     | WRITE_KEYWORD write_arg+  # write
     | CALC_KEYWORD IDENTIFIER COLON expression # calc
     | UPDATE_KEYWORD IDENTIFIER COLON expression # mutate
-    | EXIT_MODULE_KEYWORD # return
+    | EXIT_KEYWORD EXCLAMATION # return
     ;
 
 

@@ -4,13 +4,14 @@ DEFINER EIT MODUL fakultet MED
 SOM:
     GJENTAR
         SKRIV «Kan ikkje beregne fakultet av eit negativt tall!»,
-        AVSLUT MODUL
+        AVSLUT!
     MEDAN n < 0.
     REKN teller: 2.
     OBS! før denne linjen så er resultat udefiniert (-> feil)
     OPPDATER resultat: 1.
     GJENTAR 
-        OPPDATER resultat: resultat' * teller
+        OPPDATER resultat: resultat' * teller,
+        OPPDATER teller: teller' + 1
     MEDAN teller <= n.
     AVSLUT MODUL.
 
