@@ -1,0 +1,15 @@
+REKN tegn: «a».
+REKN x: 3.
+REKN y: 2.
+GJENTAR
+    REKN tegn: «b»,
+    GJENTAR
+        REKN tegn: «c»,
+        SKRIV tegn,
+        OPPDATER y: y' - 1
+    MEDAN y > 0,
+    SKRIV tegn,
+    OPPDATER x: x' - 1
+MEDAN x > 0.
+SKRIV tegn.
+FERDIG.

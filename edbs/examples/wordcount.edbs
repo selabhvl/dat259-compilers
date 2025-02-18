@@ -9,13 +9,13 @@ OBS!  <linjeskift> kan være '\r' eller '\r\n' avhengig av filens format
 OBS!  <tomrom> står for '<space>', 'tab', eller linjeskift 
 OBS!  <tom> er EDBS+ sitt 'null' :P
 REKN linje: innputt // <linjeskift>.
-REKN nåværende: neste i linje.
+REKN nåværende: neste linje.
 REKN teller: 0.
 GJENTAR
     REKN ord: nåværende // <tomrom>,
     OPPDATER teller: teller' + 1,
-    OPPDATER nåværende: neste i linje
+    OPPDATER nåværende: neste linje
 MEDAN IKKJE nåværende = <tom>.
-SKRIV «Antall ord i» innputt «er» teller. 
+SKRIV «Antall ord i» innputt «er» teller.
 FERDIG.
 
