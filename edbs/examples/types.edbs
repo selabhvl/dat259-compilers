@@ -5,7 +5,6 @@ OBS! infer 'a' and 'tall' er 'number'
 REKN a: tall + 1.
 OBS! infer 'b' is hugseliste,  'ord' er 'string'
 REKN b: ord // « ».
-OBS! infer 'b' is 'string'
 REKN c: neste b.
 OBS! infer 'c' is 'string'
 REKN d: c -- a.

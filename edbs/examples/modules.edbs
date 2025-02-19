@@ -15,7 +15,7 @@ SOM:
     MEDAN teller <= n.
     AVSLUT MODUL.
 
-LES tall: «Skriv eit tall du vil beregne fakultetet av:».
+LES tall: «Skriv eit tall du vil beregne fakultetet av».
 REKN utputt: KALL fakultet MED tall.
 SKRIV «Fakultet av» tall «er» utputt.
 FERDIG.
