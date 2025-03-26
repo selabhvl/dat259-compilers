@@ -42,7 +42,7 @@ builder.ret(ir.Constant(i32, 0))
 
 print(module)
 
-with open(file_name, "w") as output_file:
-    output_file.write(str(module))
+#with open(file_name, "w") as output_file:
+#    output_file.write(str(module))
 
-subprocess.run(['clang', file_name, '-w', '-o', base_name.stem ])
+#subprocess.run(['clang', file_name, '-w', '-o', base_name.stem ])

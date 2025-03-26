@@ -61,3 +61,9 @@ with open(file_name, "w") as output_file:
 
 subprocess.run(['clang', file_name, '-w', '-o', base_name.stem ])
 ```
+
+see also [test.py](../edbs/edbs/test.py)!
+
+**Note 2025-03-26**: The error that appeared during the lecture appeared because I forgot to properly call
+the `ir.PointerType()` type constructor on line 27 in [`compiler.py`](../edbs/edbs/compiler.py). 
+The current version now works and properly produced a "hello world"!

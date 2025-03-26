@@ -183,6 +183,8 @@ class EDBSTypeChecker(EDBSVisitor):
         print(f"{self.symbol_table}")
 
 
+
+
 def type_check(file: Path, print_info: bool = False):
     print(f"Leser EDBS fil '{file.resolve()}'...", end="")
     ast = parse(file)
