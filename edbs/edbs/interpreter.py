@@ -3,22 +3,21 @@ import sys
 from edbs.parser.EDBSParser import  EDBSParser
 from edbs.parser.EDBSVisitor import EDBSVisitor
 from edbs.utils import parse, CollectActualParams
-from edbs.symbols import SymbolTable, Module, EDBSException
+from edbs.symbols import SymbolTable, Module, EDBSException, UnsupportedFeature
 from pathlib import Path
 
 
-class InterpreterVisitor(EDBSVisitor):
+class EDBSInterpreter(EDBSVisitor):
 
     def __init__(self, symbol_table: SymbolTable):
         self.symbol_table = symbol_table
-
 
     def visitModule_def(self, ctx:EDBSParser.Module_defContext):
         name = str(ctx.IDENTIFIER())
         params = self.visit(ctx.input_params())
         result = self.visit(ctx.output_params())
-        ctx.output_params()
-        m = Module(params, result, ctx.module_body())
+        m = Module(params, result, ctx.module_body(), ctx.start.line, ctx.start.column )
+        m.body = ctx.module_body()
         self.symbol_table.modules[name] = m
 
     def visitOutput_params(self, ctx:EDBSParser.Output_paramsContext):
@@ -40,7 +39,7 @@ class InterpreterVisitor(EDBSVisitor):
     def visitWrite_arg(self, ctx:EDBSParser.Write_argContext):
         if ctx.IDENTIFIER() is not None:
             name = str(ctx.IDENTIFIER())
-            value = self.symbol_table.get_var(name)
+            value = self.symbol_table.get_var(name, ctx.start.line, ctx.start.column).value
             if isinstance(value, float):
                 value = str(round(value, 2)).replace(".", ",")
             if value.endswith(",0"):
@@ -59,19 +58,19 @@ class InterpreterVisitor(EDBSVisitor):
         prompt = str(ctx.STRING())[1:-1]
         value = float(input(f"{prompt}: ").replace(".", "").replace(",", "."))
         name = str(ctx.IDENTIFIER())
-        self.symbol_table.add_var(name, value)
+        self.symbol_table.add_var(name, ctx.start.line, ctx.start.column, value)
 
     def visitCalc(self, ctx:EDBSParser.CalcContext):
         name = str(ctx.IDENTIFIER())
         value = self.visit(ctx.expression())
-        self.symbol_table.add_var(name, value)
+        self.symbol_table.add_var(name, line=ctx.start.line, col=ctx.start.column, value=value)
 
     def visitMutate(self, ctx:EDBSParser.MutateContext):
         name = str(ctx.IDENTIFIER())
         if not self.symbol_table.is_defined(name):
-            self.symbol_table.add_var(name,0.0)
+            self.symbol_table.add_var(name, ctx.start.line, ctx.start.column, value=0.0)
         value = self.visit(ctx.expression())
-        self.symbol_table.mutate_var(name, value)
+        self.symbol_table.mutate_var(name, ctx.start.line, ctx.start.column, value=value)
 
     def visitWhile(self, ctx:EDBSParser.WhileContext):
         is_satisfied =  self.visit(ctx.bool_expr())
@@ -101,7 +100,8 @@ class InterpreterVisitor(EDBSVisitor):
 
     def visitVar(self, ctx:EDBSParser.VarContext):
         name = str(ctx.IDENTIFIER())
-        value = self.symbol_table.get_var(name)
+        var_obj = self.symbol_table.get_var(name, ctx.start.line, ctx.start.column)
+        value = var_obj.get_val()
         return value
 
     def visitAdd(self, ctx:EDBSParser.AddContext):
@@ -123,28 +123,27 @@ class InterpreterVisitor(EDBSVisitor):
         return self.visit(ctx.expression())
 
     def visitListop(self, ctx:EDBSParser.ListopContext):
-        return None # TODO: hugseliste
+        raise UnsupportedFeature("operasjoner på hugselister") # TODO: hugseliste
 
     def visitCall(self, ctx:EDBSParser.CallContext):
         name = str(ctx.IDENTIFIER())
+        module = self.symbol_table.get_module(name, ctx.start.line, ctx.start.column)
+
+        # update module symbol table with actual param values
         collect_actuals = CollectActualParams(self.symbol_table)
         collect_actuals.visit(ctx.actual_param_list())
-        module = self.symbol_table.modules[name]
-        global_scope = self.symbol_table
-        self.symbol_table = SymbolTable()
-        for p, v in zip(module.formal_params, collect_actuals.values):
-            self.symbol_table.add_var(p, v)
+        for p, v in zip(module.formal_param_names, collect_actuals.values):
+            module.symbols.get_var(p, ctx.start.line, ctx.start.column).value = v
 
-        #try:
-        self.visit(module.body)
-        # except ExitCall:
-        #     pass # TODO: error handling
-        result = self.symbol_table.get_var(module.result)
-        self.symbol_table = global_scope
+        # call module with fresh interpreter
+        module_interpreter = EDBSInterpreter(module.symbols)
+        module_interpreter.visit(module.body)
+
+        # get result back
+        result = module.symbols.get_var(module.result_param_name, ctx.start.line, ctx.start.column).value
         return result
 
     # bool expressions
-
     def visitComp(self, ctx:EDBSParser.CompContext):
         return self.visit(ctx.comparison())
 
@@ -175,7 +174,7 @@ class InterpreterVisitor(EDBSVisitor):
 def interpret(file: Path):
     ast = parse(file)
     symbols = SymbolTable()
-    interpreter = InterpreterVisitor(symbols)
+    interpreter = EDBSInterpreter(symbols)
     try:
         interpreter.visit(ast)
     except EDBSException as e:
@@ -185,7 +184,7 @@ def interpret(file: Path):
 def main():
     if len(sys.argv) >= 2:
         progname = sys.argv[1]
-        progfile = Path.cwd().resolve(progname)
+        progfile = Path.cwd() / progname
         interpret(progfile)
     else:
         print("Betjeningsfeil! Bruk: edbi <FILNAMN>")

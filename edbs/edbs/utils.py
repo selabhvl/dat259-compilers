@@ -10,6 +10,7 @@ class CollectActualParams(EDBSVisitor):
     def __init__(self, symbol_table):
         self.symbol_table = symbol_table
         self.values = []
+        self.types = []
 
     def visitActual_param_list(self, ctx:EDBSParser.Actual_param_listContext):
         for p in ctx.getChildren():
@@ -18,11 +19,16 @@ class CollectActualParams(EDBSVisitor):
 
     def visitActual_param(self, ctx:EDBSParser.Actual_paramContext):
         if ctx.IDENTIFIER() is not None:
-            self.values.append(self.symbol_table.get_var(str(ctx.IDENTIFIER())))
+            var_name = str(ctx.IDENTIFIER())
+            var = self.symbol_table.get_var(var_name, ctx.start.line, ctx.start.column)
+            self.values.append(var.value)
+            self.types.append(var.admissible_types)
         elif ctx.NUMBER():
             self.values.append(float(str(ctx.NUMBER()).replace(".","").replace(",",".")))
+            self.types.append({'tal'})
         else:
             self.values.append(self.visit(ctx.str_literal()))
+            self.types.append({'streng'})
 
     def visitStr_literal(self, ctx:EDBSParser.Str_literalContext):
         if ctx.STRING() is not None:
