@@ -178,3 +178,8 @@ edbs/edbs/EDBSLexer.py
 edbs/edbs/EDBSLexer.tokens
 edbs/edbs/EDBSParser.py
 edbs/edbs/EDBSVisitor.py
+llvm/hello
+llvm/hello.s
+llvm/hello.bc
+llvm/hello.ll
+llvm/hello.o
